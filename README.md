@@ -2,6 +2,10 @@
 
 Snippet Vault is a monorepo full-stack application for managing your code snippets, terminal commands, and notes.
 
+**Deploy link:** https://test-task-snippe-vault-frontend-2mf-two.vercel.app
+
+❗**Note on Deployment:** Since the project is hosted on a free tier, the instance may need up to 45 seconds to spin up (cold start). If the link doesn't respond immediately, please give it a moment to initialize.
+
 Built with a **NestJS** backend, a **Next.js** frontend, and **MongoDB** for storage. The monorepo is managed using **Turborepo** and **pnpm workspaces**.
 
 ## 🛠 Tech Stack
@@ -31,7 +35,7 @@ MONGO_URI="mongodb://root:rootpassword@localhost:27017/snippet_db?authSource=adm
 ```env
 # frontend/.env.local
 # Points to the local NestJS server
-NEXT_PUBLIC_API_URL="http://localhost:3002"
+NEXT_PUBLIC_API_BASE_URL="http://localhost:3002"
 ```
 
 ---
@@ -48,7 +52,7 @@ pnpm install
    If you are using Docker, start your database container:
 
 ```bash
-docker compose up -d mongo
+docker compose up -d mongodb
 ```
 
 _(If you have a local MongoDB instance installed, just make sure it's running)._
@@ -143,7 +147,3 @@ pnpm --filter backend start:prod
 pnpm --filter frontend start
 ```
 
-```
-
-
-```

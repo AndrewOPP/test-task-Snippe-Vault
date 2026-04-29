@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 
 export class FindAllQueryDto {
   @IsOptional()
-  @Type(() => Number) // Автоматически конвертирует строку в число
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   page?: number = 1;
@@ -19,5 +19,5 @@ export class FindAllQueryDto {
   q?: string;
 
   @IsOptional()
-  tag?: string; // Если нужен массив, можно добавить @IsArray()
+  tag?: string;
 }
