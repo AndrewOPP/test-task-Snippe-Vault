@@ -1,5 +1,6 @@
 'use client';
 
+import { SNIPPETS_PAGE_LIMIT } from '@/constants';
 import type { PaginatedSnippets } from '@/types';
 import { SnippetCard } from './SnippetCard';
 import { StatusCard } from './StatusCard';
@@ -21,6 +22,8 @@ export function SnippetList({
   onRetry,
   onClearFilters,
 }: SnippetListProps) {
+  const emptySlots = data ? Math.max(0, SNIPPETS_PAGE_LIMIT - data.items.length) : 0;
+
   if (!data) {
     return (
       <StatusCard
@@ -94,6 +97,27 @@ export function SnippetList({
             isDeleting={deletingId === item._id}
             onDelete={onDelete}
           />
+        ))}
+
+        {Array.from({ length: emptySlots }, (_, index) => (
+          <div
+            key={`snippet-placeholder-${index}`}
+            aria-hidden="true"
+            className="invisible pointer-events-none"
+          >
+            <SnippetCard
+              snippet={{
+                _id: `snippet-placeholder-${index}`,
+                title: 'Placeholder snippet',
+                content: 'Placeholder content',
+                tags: [],
+                type: 'note',
+                createdAt: '1970-01-01T00:00:00.000Z',
+                updatedAt: '1970-01-01T00:00:00.000Z',
+              }}
+              onDelete={() => {}}
+            />
+          </div>
         ))}
       </div>
     </section>

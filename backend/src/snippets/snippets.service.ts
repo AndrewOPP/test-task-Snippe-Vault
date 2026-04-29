@@ -57,7 +57,7 @@ export class SnippetsService {
     return `Snippet with ID ${id} deleted.`;
   }
 
-  async findAll(page: number = 1, limit: number = 10, q?: string, tag?: string | string[]) {
+  async findAll(page: number = 1, limit: number = 9, q?: string, tag?: string | string[]) {
     const skip = (page - 1) * limit;
 
     const filter: Record<string, any> = {};
@@ -77,7 +77,12 @@ export class SnippetsService {
     }
 
     const [items, total] = await Promise.all([
-      this.snippetModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).exec(),
+      this.snippetModel
+        .find(filter)
+        .sort({ createdAt: -1, _id: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
       this.snippetModel.countDocuments(filter).exec(),
     ]);
 

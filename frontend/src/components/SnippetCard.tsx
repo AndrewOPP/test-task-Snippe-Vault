@@ -21,7 +21,7 @@ export function SnippetCard({ snippet, isDeleting = false, onDelete }: SnippetCa
   const titlePreview = shortenSnippetTitle(snippet.title);
 
   return (
-    <article className="flex h-full flex-col rounded-3xl border border-slate-200/80 bg-white/80 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+    <article className="flex h-[16.5rem] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
       <div className="flex items-start justify-between gap-3">
         <span
           className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] ${SNIPPET_TYPE_STYLES[snippet.type]}`}

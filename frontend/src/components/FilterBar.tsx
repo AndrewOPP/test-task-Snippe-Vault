@@ -87,7 +87,7 @@ export function FilterBar({
       <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <label className="space-y-2">
           <span className="text-sm font-medium text-slate-700">Search</span>
-          <div className="relative">
+          <div className="relative mt-2">
             <input
               value={searchValue}
               onChange={(event) => setSearchValue(event.target.value)}

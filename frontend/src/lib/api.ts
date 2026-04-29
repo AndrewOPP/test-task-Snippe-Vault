@@ -31,7 +31,7 @@ function buildSnippetsUrl(params: FetchSnippetsParams = {}): string {
   const searchParams = new URLSearchParams();
 
   searchParams.set('page', String(params.page ?? 1));
-  searchParams.set('limit', String(params.limit ?? 10));
+  searchParams.set('limit', String(params.limit ?? 9));
 
   if (params.q?.trim()) {
     searchParams.set('q', params.q.trim());

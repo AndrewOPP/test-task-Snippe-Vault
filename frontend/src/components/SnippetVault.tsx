@@ -62,7 +62,6 @@ export function SnippetVault({ data, query, tagFacets }: SnippetVaultProps) {
   const handlePageChange = useCallback(
     (page: number) => {
       navigate({ page });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     [navigate],
   );
