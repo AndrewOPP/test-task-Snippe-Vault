@@ -3,6 +3,7 @@ import { SnippetsService } from './snippets.service';
 import { CreateSnippetDto } from './dto/create-snippet.dto';
 import { UpdateSnippetDto } from './dto/update-snippet.dto';
 import { ParseObjectIdPipe } from '@nestjs/mongoose';
+import { FindAllQueryDto } from './dto/find-add.dto';
 
 @Controller('snippets')
 export class SnippetsController {
@@ -14,16 +15,8 @@ export class SnippetsController {
   }
 
   @Get()
-  findAll(
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-    @Query('q') q?: string,
-    @Query('tag') tag?: string,
-  ) {
-    const pageNumber = page ? parseInt(page, 10) : 1;
-    const limitNumber = limit ? parseInt(limit, 10) : 10;
-
-    return this.snippetsService.findAll(pageNumber, limitNumber, q, tag);
+  findAll(@Query() query: FindAllQueryDto) {
+    return this.snippetsService.findAll(query.page, query.limit, query.q, query.tag);
   }
 
   @Get(':id')

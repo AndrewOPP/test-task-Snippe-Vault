@@ -9,6 +9,21 @@ import { UpdateSnippetDto } from './dto/update-snippet.dto';
 export class SnippetsService {
   constructor(@InjectModel(Snippet.name) private snippetModel: Model<SnippetDocument>) {}
 
+  private escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  private parseTags(tag?: string | string[]): string[] {
+    if (!tag) return [];
+
+    const tagsArray = Array.isArray(tag) ? tag : [tag];
+
+    return tagsArray
+      .flatMap((t) => t.split(','))
+      .map((t) => t.trim())
+      .filter(Boolean);
+  }
+
   async create(createSnippetDto: CreateSnippetDto): Promise<Snippet> {
     const createdSnippet = new this.snippetModel(createSnippetDto);
     return createdSnippet.save();
@@ -17,7 +32,7 @@ export class SnippetsService {
   async findOne(id: string): Promise<Snippet> {
     const snippet = await this.snippetModel.findById(id).exec();
     if (!snippet) {
-      throw new NotFoundException(`Snippet with ID ${id} not found`);
+      throw new NotFoundException(`Snippet with ID ${id} not found.`);
     }
     return snippet;
   }
@@ -28,7 +43,7 @@ export class SnippetsService {
       .exec();
 
     if (!updatedSnippet) {
-      throw new NotFoundException(`Snippet with ID ${id} not found`);
+      throw new NotFoundException(`Snippet with ID ${id} not found.`);
     }
     return updatedSnippet;
   }
@@ -36,23 +51,29 @@ export class SnippetsService {
   async remove(id: string): Promise<string> {
     const deletedSnippet = await this.snippetModel.findByIdAndDelete(id).exec();
     if (!deletedSnippet) {
-      throw new NotFoundException(`Snippet with ID ${id} not found`);
+      throw new NotFoundException(`Snippet with ID ${id} not found.`);
     }
 
-    return `Snippet with id ${id} deleted`;
+    return `Snippet with ID ${id} deleted.`;
   }
 
-  async findAll(page: number = 1, limit: number = 10, q?: string, tag?: string) {
+  async findAll(page: number = 1, limit: number = 10, q?: string, tag?: string | string[]) {
     const skip = (page - 1) * limit;
 
     const filter: Record<string, any> = {};
 
-    if (q) {
-      filter.$text = { $search: q };
+    const normalizedQuery = q?.trim();
+    if (normalizedQuery) {
+      const escapedQuery = this.escapeRegExp(normalizedQuery);
+      filter.$or = [
+        { title: { $regex: escapedQuery, $options: 'i' } },
+        { content: { $regex: escapedQuery, $options: 'i' } },
+      ];
     }
 
-    if (tag) {
-      filter.tags = tag;
+    const selectedTags = this.parseTags(tag);
+    if (selectedTags.length > 0) {
+      filter.tags = { $in: selectedTags };
     }
 
     const [items, total] = await Promise.all([
@@ -65,7 +86,7 @@ export class SnippetsService {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.max(1, Math.ceil(total / limit)),
     };
   }
 }

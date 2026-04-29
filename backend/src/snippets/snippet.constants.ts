@@ -1,0 +1,3 @@
+export const SNIPPET_TITLE_MAX_LENGTH = 120;
+export const SNIPPET_CONTENT_MAX_LENGTH = 5000;
+export const SNIPPET_TAG_MAX_LENGTH = 32;
